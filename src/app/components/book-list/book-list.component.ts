@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Book } from 'src/app/models/book';
 import { BookStoreActions, BookStoreSelectors, BookStoreState } from 'src/app/state/book';
 
@@ -14,8 +15,10 @@ export class BookListComponent implements OnInit {
   error: string;
   isLoading$: Observable<boolean>;
   books: Observable<Book[]>;
+  filteredBooks: Observable<Book[]>
+  noRecords: boolean = false
 
-  constructor(private store: Store<BookStoreState.State>) {}
+  constructor(private store: Store<BookStoreState.State>) { }
 
   ngOnInit(): void {
     this.books = this.store.select(
@@ -33,17 +36,41 @@ export class BookListComponent implements OnInit {
     );
 
     this.store.dispatch(new BookStoreActions.LoadBooksRequestAction());
+    this.filteredBooks = this.books;
   }
 
-  // getBooks() {
-  //   this.store.dispatch(new BookStoreActions.LoadBooksRequestAction());
+  search(value: string) {
+    if (value) {
+      this.filteredBooks = this.books
+        .pipe(
+          map((books: Book[]) => {
+            return books.filter((book: Book) => {
+              let isValidSearch = false
+              if(book.title.toLowerCase().indexOf(value.toLowerCase()) > -1){
+                isValidSearch = true
+              }
+              if(book.publisher && book.publisher.toLowerCase().indexOf(value.toLowerCase()) > -1){
+                isValidSearch = true
+              }
+              book.authors.forEach(author => {
+                if(author.toLowerCase().indexOf(value.toLowerCase()) > -1){
+                  isValidSearch = true
+                }
+              })
+              return  isValidSearch
+            })
+          })
+        )
 
-  //   this.store.select(
-  //     BookStoreSelectors.selectBookError
-  //   ).subscribe(data => {
-  //     this.error = data
-  //   });
-  // }
+      this.filteredBooks.subscribe(res => {
+        if (!res.length) {
+          this.noRecords = true
+        }
+      });
+    } else {
+      this.filteredBooks = this.books;
+    }
+  }
 
 
 }
