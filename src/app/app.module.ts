@@ -12,6 +12,7 @@ import { BookStateModule } from './state/book';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BookService } from './services/book.service';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,8 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     EffectsModule.forRoot([]),
     StoreModule.forRoot({}),
     BookStateModule,
