@@ -6,7 +6,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
  - [ngrx/store](https://github.com/ngrx/store) - RxJS powered state management for Angular apps, inspired by Redux
  - [ngrx/effects](https://github.com/ngrx/effects) - Side effect model for @ngrx/store
  - [angular/router](https://github.com/angular/angular) - Angular Router
- - [ngrx/store-devtools](https://github.com/ngrx/store-devtools) - 
+ - [ngrx/store-devtools](https://github.com/ngrx/store-devtools) - Instrumentation for @ngrx/store enabling time-travel debugging
 
 ### Quick start
 
