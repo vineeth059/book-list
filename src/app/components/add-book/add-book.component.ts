@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {Router} from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Book } from 'src/app/models/book';
 
 @Component({
   selector: 'app-add-book',
@@ -15,7 +15,6 @@ export class AddBookComponent implements OnInit {
     publisher: new FormControl('', Validators.required),
     publishedDate: new FormControl('', Validators.required),
   });
-  @Output() addBook: EventEmitter<any> = new EventEmitter();
   
   constructor(private router: Router) { }
 
@@ -23,14 +22,15 @@ export class AddBookComponent implements OnInit {
   }
 
   onSubmit() {
-    // TODO: Use EventEmitter with form value
-    console.warn(this.bookForm.value);
-    this.addBook.emit(this.bookForm.value)
+    let {title, authors, publisher, publishedDate} = this.bookForm.value;
+    authors = authors.split(',')
+    const bookAdded: Book = {title, authors, publisher, publishedDate}
+    
     this.bookForm.reset();
-    this.router.navigate(['']);
+    this.router.navigateByUrl('', {state: bookAdded});
   }
 
   back() {
-    this.router.navigate(['']);
+    this.router.navigateByUrl('');
   }
 }
